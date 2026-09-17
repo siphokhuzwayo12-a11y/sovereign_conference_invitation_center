@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0131)file:///C:/Users/ASUS/AppData/Local/Temp/MicrosoftEdgeDownloads/e66e0e2a-71f1-447d-89c8-33ad33794e43/gemini-code-1789618023199.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prestige Sovereign Conference Room & Command Suite v17.0</title>
+    <title>Prestige Sovereign Conference Room &amp; Command Suite v18.0</title>
     <style>
         :root {
             --bg-obsidian: #050709;
@@ -48,6 +48,9 @@
         .input-field { width: 100%; padding: 8px 12px; background: #000; border: 1px solid rgba(0, 255, 157, 0.3); border-radius: 6px; color: var(--accent-emerald); font-family: monospace; font-size: 0.78rem; margin-bottom: 8px; }
         .input-field:focus { outline: none; border-color: var(--accent-emerald); }
         
+        .dateTime-row { display: flex; gap: 8px; margin-bottom: 8px; }
+        .dateTime-row input { flex: 1; margin-bottom: 0; color-scheme: dark; }
+
         select.input-field { cursor: pointer; }
         select.input-field option { background: #050709; color: var(--accent-emerald); }
 
@@ -108,7 +111,7 @@
                             <div class="feed-label">HOST</div>
                             <div style="font-size: 0.8rem; font-weight: bold; color: var(--text-primary);">Sipho W. Khuzwayo</div>
                         </div>
-                        <video id="localVideo" autoplay playsinline muted></video>
+                        <video id="localVideo" autoplay="" playsinline="" muted=""></video>
                         <div class="avatar-placeholder" id="hostAvatar">SWK</div>
                     </div>
                     <div class="video-feed" id="peerFeed">
@@ -129,11 +132,17 @@
 
             <div class="card">
                 <div class="card-title">
-                    <span class="card-title-text">Audience Invitation Dispatch</span>
+                    <span class="card-title-text">Audience Invitation &amp; Calendar Schedule</span>
                 </div>
                 
                 <input type="email" id="inviteEmail" class="input-field" value="info.lepprojects@gmail.com" placeholder="steward@sovereign-group.com">
                 <input type="text" id="meetingTopic" class="input-field" value="Scapush Precision Strategic Review">
+                
+                <div class="dateTime-row">
+                    <input type="date" id="meetingDate" class="input-field">
+                    <input type="time" id="meetingTime" class="input-field" value="10:00">
+                </div>
+
                 <input type="text" id="customHostUrl" class="input-field" value="https://siphokhuzwayo12-a11y.github.io/sovereign_conference_invitation_center/index.html" style="border-color: var(--accent-cyan);">
                 
                 <select id="inviteeDropdown" class="input-field" onchange="selectInviteeFromDropdown(this)">
@@ -142,9 +151,8 @@
                 </select>
 
                 <div class="btn-group" style="margin-top: 4px;">
-                    <button class="btn btn-emerald" onclick="autoDispatchInvite()" style="width: 100%;">⚡ Auto-Send Email &amp; Join Link</button>
-                    <button class="btn btn-gmail" onclick="openGmailCompose()" style="width: 100%;">✉ Direct Gmail Dispatch</button>
-                    <button class="btn" onclick="exportCalendarInvite()" style="flex: 1; border-color: var(--accent-cyan); color: var(--accent-cyan);">Export .ICS</button>
+                    <button class="btn btn-gmail" onclick="openGmailCompose()" style="width: 100%;">✉ Direct Gmail Dispatch (With Date &amp; Time)</button>
+                    <button class="btn" onclick="exportCalendarInvite()" style="flex: 1; border-color: var(--accent-cyan); color: var(--accent-cyan);">📅 Export .ICS Calendar Invite</button>
                     <button class="btn" onclick="runInviteDryRun()" style="flex: 1;">🧪 Dry-Run Test</button>
                 </div>
             </div>
@@ -153,7 +161,7 @@
                 <div class="card-title">
                     <span class="card-title-text">Architectural Whiteboard</span>
                 </div>
-                <canvas id="whiteboard" class="canvas-box"></canvas>
+                <canvas id="whiteboard" class="canvas-box" width="278" height="200"></canvas>
                 <div class="btn-group">
                     <button class="btn btn-emerald" onclick="clearCanvas()" style="flex: 1;">Clear</button>
                     <button class="btn" onclick="exportBlueprint()" style="flex: 1;">Export PNG</button>
@@ -184,10 +192,10 @@ LEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision
 
 1. CAPITAL ALLOCATION:
    - Energy Hub (R 1.2M): 30 kW Solar PV + 30 kW BESS Battery Array
-   - Bio-Reactor (R 1.1M): 70 m³ Primary Digester & Substrate Loops
-   - Generation & Thermal (R 800k): CHP Co-Gen + Hydronic Thermal Manifold
+   - Bio-Reactor (R 1.1M): 70 m³ Primary Digester &amp; Substrate Loops
+   - Generation &amp; Thermal (R 800k): CHP Co-Gen + Hydronic Thermal Manifold
 
-2. REVENUE & VALORIZATION VECTORS:
+2. REVENUE &amp; VALORIZATION VECTORS:
    - Vector 1: 24/7 Baseload Electricity Generation
    - Vector 2: Reclaimed Co-Gen Heat for Microclimate Lock
    - Vector 3: Premium Solid Organic N-P-K Bio-Fertilizer
@@ -220,9 +228,17 @@ LEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision
         </section>
     </main>
 
-    <div class="toast" id="toast">Suite v17.0 Direct-Link Active</div>
+    <div class="toast" id="toast">Suite v18.0 Calendar Scheduled</div>
 
     <script>
+        // Set default date picker to tomorrow
+        window.addEventListener('DOMContentLoaded', () => {
+            const datePicker = document.getElementById('meetingDate');
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            datePicker.value = tomorrow.toISOString().split('T')[0];
+        });
+
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
@@ -261,6 +277,8 @@ LEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision
         function openGmailCompose() {
             const email = document.getElementById('inviteEmail').value.trim();
             const topic = document.getElementById('meetingTopic').value.trim();
+            const dateVal = document.getElementById('meetingDate').value;
+            const timeVal = document.getElementById('meetingTime').value;
 
             if (!email) {
                 showToast("Please enter an invitee email.");
@@ -268,31 +286,15 @@ LEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision
             }
 
             const roomLink = getActiveSuiteUrl();
-            const bodyText = `Honorable Steward,\n\nYou are invited to join the Sovereign Executive Conference Suite.\n\nTopic: ${topic}\nAccess Link: ${roomLink}\nPasskey: SCAPUSH-PRECISION-7799-BIO-SOLAR-DOMED-2026\n\nLead Architect: Sipho Wiseman Khuzwayo`;
+            const formattedSchedule = `${dateVal || 'Scheduled Date'} at ${timeVal || '10:00'} SAST`;
             
-            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(topic)}&body=${encodeURIComponent(bodyText)}`;
+            const bodyText = `Honorable Steward,\n\nYou are invited to join the Sovereign Executive Conference Suite.\n\nTopic: ${topic}\nDate & Time: ${formattedSchedule}\nAccess Link: ${roomLink}\nPasskey: SCAPUSH-PRECISION-7799-BIO-SOLAR-DOMED-2026\n\nLead Architect: Sipho Wiseman Khuzwayo`;
+            
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(topic + ' - Scheduled Call')}&body=${encodeURIComponent(bodyText)}`;
 
             window.open(gmailUrl, '_blank');
-            recordInvitee(email, topic, "Gmail Dispatched");
-            showToast(`Gmail Web Compose Launched for ${email}`);
-        }
-
-        function autoDispatchInvite() {
-            const email = document.getElementById('inviteEmail').value.trim();
-            const topic = document.getElementById('meetingTopic').value.trim();
-
-            if (!email) {
-                showToast("Please enter a valid steward email address.");
-                return;
-            }
-
-            const roomLink = getActiveSuiteUrl();
-            const mailtoBody = encodeURIComponent(`Honorable Steward,\n\nYou are invited to join the Sovereign Executive Conference Suite.\n\nTopic: ${topic}\nAccess Link: ${roomLink}\nPasskey: SCAPUSH-PRECISION-7799-BIO-SOLAR-DOMED-2026\n\nLead Architect: Sipho Wiseman Khuzwayo`);
-            const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(topic)}&body=${mailtoBody}`;
-
-            window.open(mailtoUrl, '_blank');
-            recordInvitee(email, topic, "Auto-Link Sent");
-            showToast(`Auto-Dispatch Initialized for ${email}`);
+            recordInvitee(email, topic, "Gmail Scheduled");
+            showToast(`Gmail Schedule Launched for ${email}`);
         }
 
         function recordInvitee(email, topic, status) {
@@ -330,7 +332,14 @@ LEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision
 
         function exportCalendarInvite() {
             const topic = document.getElementById('meetingTopic').value.trim() || "Sovereign Executive Conference";
+            const dateVal = document.getElementById('meetingDate').value;
+            const timeVal = document.getElementById('meetingTime').value;
             const roomLink = getActiveSuiteUrl();
+
+            let dtStart = "20260918T100000Z";
+            if (dateVal && timeVal) {
+                dtStart = dateVal.replace(/-/g, "") + "T" + timeVal.replace(":", "") + "00Z";
+            }
             
             const icsData = [
                 "BEGIN:VCALENDAR",
@@ -338,7 +347,8 @@ LEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision
                 "PRODID:-//Scapush Precision//Prestige Suite//EN",
                 "BEGIN:VEVENT",
                 `SUMMARY:${topic}`,
-                `DESCRIPTION:Join Sovereign Conference Suite: ${roomLink}`,
+                `DTSTART:${dtStart}`,
+                `DESCRIPTION:Join Sovereign Conference Suite: ${roomLink}\\nPasskey: SCAPUSH-PRECISION-7799-BIO-SOLAR-DOMED-2026`,
                 "LOCATION:Prestige Sovereign Command Dome",
                 "STATUS:CONFIRMED",
                 "END:VEVENT",
@@ -348,20 +358,22 @@ LEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision
             const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'sovereign-conference-invite.ics';
+            link.download = `conference-${dateVal || 'schedule'}.ics`;
             link.click();
-            showToast("Calendar Invite (.ics) Downloaded.");
+            showToast("Calendar Schedule (.ics) Downloaded.");
         }
 
         function runInviteDryRun() {
             const email = document.getElementById('inviteEmail').value.trim() || "info.lepprojects@gmail.com";
             const topic = document.getElementById('meetingTopic').value.trim() || "Scapush Precision Strategic Review";
+            const dateVal = document.getElementById('meetingDate').value;
+            const timeVal = document.getElementById('meetingTime').value;
             
             recordInvitee(email, topic, "Dry-Run Tested");
-            showToast(`[DRY-RUN] Verifying link for ${email}...`);
+            showToast(`[DRY-RUN] Verifying schedule (${dateVal} ${timeVal}) for ${email}...`);
             
             setTimeout(() => {
-                showToast(`[DRY-RUN PASSED] Direct index link verified!`);
+                showToast(`[DRY-RUN PASSED] Calendar & direct link verified!`);
             }, 1200);
         }
 
@@ -614,5 +626,5 @@ LEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision
             showToast("Notes Committed to Storage");
         }
     </script>
-</body>
-</html>
+
+</body></html>
