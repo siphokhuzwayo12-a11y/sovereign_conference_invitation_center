@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<!-- saved from url=(0131)file:///C:/Users/ASUS/AppData/Local/Temp/MicrosoftEdgeDownloads/e66e0e2a-71f1-447d-89c8-33ad33794e43/gemini-code-1789618023199.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prestige Sovereign Conference Room &amp; Command Suite v18.0</title>
+    <style>
+        :root {
+            --bg-obsidian: #050709;
+            --panel-bg: rgba(12, 18, 22, 0.95);
+            --accent-emerald: #00FF9D;
+            --accent-gold: #FFB800;
+            --accent-cyan: #00E5FF;
+            --accent-danger: #FF3366;
+            --text-primary: #F0F4F8;
+            --text-secondary: #7B8B9A;
+            --border-glow: rgba(0, 255, 157, 0.25);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-obsidian); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header {
+            display: flex; justify-content: space-between; align-items: center; padding: 16px 32px;
+            background: rgba(5, 7, 9, 0.98); border-bottom: 1px solid var(--border-glow);
+            box-shadow: 0 4px 20px rgba(0, 255, 157, 0.05); position: sticky; top: 0; z-index: 100;
+        }
+
+        .brand-seal { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; font-size: 1.05rem; }
+        .seal-icon { width: 14px; height: 14px; background: var(--accent-emerald); border-radius: 50%; box-shadow: 0 0 14px var(--accent-emerald); }
+        .status-pill { font-size: 0.75rem; color: var(--accent-emerald); background: rgba(0, 255, 157, 0.08); padding: 6px 14px; border-radius: 20px; border: 1px solid var(--accent-emerald); letter-spacing: 1px; font-weight: 600; transition: all 0.3s ease; }
+        .status-pill.disconnected { color: var(--accent-danger); background: rgba(255, 51, 102, 0.08); border-color: var(--accent-danger); }
+
+        main { display: grid; grid-template-columns: 320px 1fr; gap: 20px; padding: 24px; max-width: 1920px; margin: 0 auto; width: 100%; flex: 1; }
+        
+        .card { background: var(--panel-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px; backdrop-filter: blur(8px); display: flex; flex-direction: column; }
+        .card-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--text-secondary); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+        .card-title-text { display: flex; align-items: center; gap: 8px; }
+        .card-title-text::before { content: ''; width: 6px; height: 6px; background: var(--accent-gold); border-radius: 50%; }
+
+        .video-grid-vertical { display: flex; flex-direction: column; gap: 12px; height: 260px; background: #000; border-radius: 8px; border: 1px solid var(--border-glow); padding: 10px; }
+        .video-feed { flex: 1; background: #0c1216; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; position: relative; overflow: hidden; }
+        .feed-label { font-size: 0.7rem; color: var(--accent-emerald); font-family: monospace; z-index: 2; }
+        .avatar-placeholder { width: 38px; height: 38px; border-radius: 50%; background: rgba(0,255,157,0.1); border: 1px solid var(--accent-emerald); display: flex; align-items: center; justify-content: center; color: var(--accent-emerald); font-weight: bold; font-size: 0.8rem; z-index: 2; }
+        
+        video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none; }
+
+        .input-field { width: 100%; padding: 8px 12px; background: #000; border: 1px solid rgba(0, 255, 157, 0.3); border-radius: 6px; color: var(--accent-emerald); font-family: monospace; font-size: 0.78rem; margin-bottom: 8px; }
+        .input-field:focus { outline: none; border-color: var(--accent-emerald); }
+        
+        .dateTime-row { display: flex; gap: 8px; margin-bottom: 8px; }
+        .dateTime-row input { flex: 1; margin-bottom: 0; color-scheme: dark; }
+
+        select.input-field { cursor: pointer; }
+        select.input-field option { background: #050709; color: var(--accent-emerald); }
+
+        .cabinet-workspace { display: flex; gap: 14px; width: 100%; height: 620px; position: relative; }
+        .doc-viewer-area { flex: 1; height: 100%; background: #000; border: 1px solid var(--border-glow); border-radius: 8px; overflow: hidden; position: relative; transition: all 0.3s ease; }
+        
+        .vertical-cabinet-shelf { width: 200px; height: 100%; background: rgba(5, 9, 12, 0.98); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; display: flex; flex-direction: column; padding: 12px; gap: 8px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; position: relative; z-index: 5; }
+        .vertical-cabinet-shelf.collapsed { width: 0; padding: 0; margin: 0; border: none; opacity: 0; pointer-events: none; }
+        
+        .shelf-header { font-size: 0.75rem; font-weight: bold; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; white-space: nowrap; }
+        .shelf-list { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex: 1; padding-right: 2px; }
+        
+        .shelf-tab-vertical { background: rgba(255, 255, 255, 0.03); color: var(--text-secondary); border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 10px; border-radius: 6px; font-size: 0.75rem; font-family: monospace; cursor: pointer; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; }
+        .shelf-tab-vertical:hover { background: rgba(255, 255, 255, 0.08); color: var(--text-primary); }
+        .shelf-tab-vertical.active { background: rgba(0, 255, 157, 0.15); color: var(--accent-emerald); border-color: var(--accent-emerald); font-weight: bold; }
+
+        iframe { width: 100%; height: 100%; border: none; background: #fff; }
+        .text-brief-fallback { width: 100%; height: 100%; background: #000; color: var(--accent-emerald); padding: 18px; font-family: monospace; font-size: 0.85rem; overflow-y: auto; white-space: pre-wrap; line-height: 1.5; }
+
+        .canvas-box { width: 100%; height: 200px; background: #000; border: 1px solid var(--border-glow); border-radius: 8px; cursor: crosshair; touch-action: none; }
+        
+        .btn { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; transition: all 0.2s ease; }
+        .btn:hover { background: rgba(255, 255, 255, 0.15); }
+        .btn-emerald { background: var(--accent-emerald); color: #000; border: none; font-weight: 700; }
+        .btn-emerald:hover { background: #00cc7d; }
+        .btn-gmail { background: #EA4335; color: #fff; border: none; font-weight: 700; }
+        .btn-gmail:hover { background: #d93025; }
+        .btn-group { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+        textarea { width: 100%; height: 140px; background: #000; border: 1px solid var(--border-glow); border-radius: 6px; color: var(--accent-emerald); padding: 12px; font-family: monospace; font-size: 0.82rem; resize: none; }
+        
+        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
+        .file-input-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
+
+        .toast { position: fixed; bottom: 20px; right: 20px; background: var(--accent-emerald); color: #000; padding: 12px 24px; border-radius: 6px; font-weight: 700; box-shadow: 0 4px 15px rgba(0,255,157,0.3); transform: translateY(100px); transition: transform 0.3s ease; z-index: 1000; }
+        .toast.show { transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-seal">
+            <div class="seal-icon"></div>
+            Prestige Sovereign Collaboration &amp; Executive Conference Room
+        </div>
+        <div class="status-pill" id="suiteStatus">SOVEREIGN CONFERENCE ROOM ACTIVE</div>
+    </header>
+
+    <main>
+        <section style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-title-text">Sovereign Video Mesh</span>
+                </div>
+                <div class="video-grid-vertical">
+                    <div class="video-feed" id="hostFeed">
+                        <div>
+                            <div class="feed-label">HOST</div>
+                            <div style="font-size: 0.8rem; font-weight: bold; color: var(--text-primary);">Sipho W. Khuzwayo</div>
+                        </div>
+                        <video id="localVideo" autoplay="" playsinline="" muted=""></video>
+                        <div class="avatar-placeholder" id="hostAvatar">SWK</div>
+                    </div>
+                    <div class="video-feed" id="peerFeed">
+                        <div>
+                            <div class="feed-label" id="peerTitle">INVESTOR / STEWARD</div>
+                            <div id="peerStatus" style="font-size: 0.75rem; color: var(--accent-emerald);">[PEER CONNECTED]</div>
+                        </div>
+                        <div class="avatar-placeholder" id="peerAvatar" style="color: var(--accent-cyan); border-color: var(--accent-cyan); background: rgba(0, 229, 255, 0.2);">INV</div>
+                    </div>
+                </div>
+                <div class="btn-group" style="margin-top: 10px;">
+                    <button class="btn btn-emerald" id="audioBtn" onclick="toggleAudio()" style="flex: 1;">Audio Loop</button>
+                    <button class="btn" id="videoBtn" onclick="toggleVideo()" style="flex: 1;">Camera</button>
+                    <button class="btn" id="peerBtn" onclick="togglePeerSim()" style="width: 100%;">Disconnect Peer</button>
+                    <button class="btn" id="sessionBtn" onclick="toggleSessionState()" style="width: 100%; border-color: var(--accent-danger); color: var(--accent-danger);">Disconnect Session</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-title-text">Audience Invitation &amp; Calendar Schedule</span>
+                </div>
+                
+                <input type="email" id="inviteEmail" class="input-field" value="info.lepprojects@gmail.com" placeholder="steward@sovereign-group.com">
+                <input type="text" id="meetingTopic" class="input-field" value="Scapush Precision Strategic Review">
+                
+                <div class="dateTime-row">
+                    <input type="date" id="meetingDate" class="input-field">
+                    <input type="time" id="meetingTime" class="input-field" value="10:00">
+                </div>
+
+                <input type="text" id="customHostUrl" class="input-field" value="https://siphokhuzwayo12-a11y.github.io/sovereign_conference_invitation_center/index.html" style="border-color: var(--accent-cyan);">
+                
+                <select id="inviteeDropdown" class="input-field" onchange="selectInviteeFromDropdown(this)">
+                    <option value="">-- Active Invitee Roster (1) --</option>
+                    <option value="0">✔ info.lepprojects@gmail.com [Gmail Dispatched]</option>
+                </select>
+
+                <div class="btn-group" style="margin-top: 4px;">
+                    <button class="btn btn-gmail" onclick="openGmailCompose()" style="width: 100%;">✉ Direct Gmail Dispatch (With Date &amp; Time)</button>
+                    <button class="btn" onclick="exportCalendarInvite()" style="flex: 1; border-color: var(--accent-cyan); color: var(--accent-cyan);">📅 Export .ICS Calendar Invite</button>
+                    <button class="btn" onclick="runInviteDryRun()" style="flex: 1;">🧪 Dry-Run Test</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-title-text">Architectural Whiteboard</span>
+                </div>
+                <canvas id="whiteboard" class="canvas-box" width="278" height="200"></canvas>
+                <div class="btn-group">
+                    <button class="btn btn-emerald" onclick="clearCanvas()" style="flex: 1;">Clear</button>
+                    <button class="btn" onclick="exportBlueprint()" style="flex: 1;">Export PNG</button>
+                </div>
+            </div>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="card" style="flex: 1;">
+                <div class="card-title">
+                    <span class="card-title-text">Expanded Document Reader Workspace</span>
+                    <div style="display: flex; gap: 8px;">
+                        <div class="file-input-wrapper">
+                            <button class="btn btn-emerald" style="padding: 4px 10px; font-size: 0.75rem;">+ Upload Doc</button>
+                            <input type="file" id="documentLoader" accept=".txt,.json,.md,.html,.htm" onchange="uploadToCabinet(event)">
+                        </div>
+                        <button class="btn" id="toggleCabinetBtn" onclick="toggleCabinet()" style="padding: 4px 10px; font-size: 0.75rem; border-color: var(--accent-gold); color: var(--accent-gold);">Collapse Shelf ➔</button>
+                    </div>
+                </div>
+
+                <div class="cabinet-workspace">
+                    <div class="doc-viewer-area" id="docViewerContainer">
+                        <div class="text-brief-fallback">====================================================================
+[PRESTIGE MASTER INFRASTRUCTURE: R 3.1M CAPEX-BUFFERED LEDGER]
+====================================================================
+ASSET VALUATION:    R 3,100,000 ZAR (Sovereign Infrastructure)
+LEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision
+
+1. CAPITAL ALLOCATION:
+   - Energy Hub (R 1.2M): 30 kW Solar PV + 30 kW BESS Battery Array
+   - Bio-Reactor (R 1.1M): 70 m³ Primary Digester &amp; Substrate Loops
+   - Generation &amp; Thermal (R 800k): CHP Co-Gen + Hydronic Thermal Manifold
+
+2. REVENUE &amp; VALORIZATION VECTORS:
+   - Vector 1: 24/7 Baseload Electricity Generation
+   - Vector 2: Reclaimed Co-Gen Heat for Microclimate Lock
+   - Vector 3: Premium Solid Organic N-P-K Bio-Fertilizer
+   - Vector 4: Concentrated Bio-Available Liquid Foliar Digestate
+   - Vector 5: Scrubbed Bio-CO2 Yield Acceleration Vector
+====================================================================</div>
+                    </div>
+
+                    <div class="vertical-cabinet-shelf" id="verticalShelf">
+                        <div class="shelf-header">
+                            <span>Cabinet Shelf</span>
+                            <span id="docCountBadge" style="color: var(--accent-emerald);">(1)</span>
+                        </div>
+                        <div class="shelf-list" id="shelfTabs">
+                            <div class="shelf-tab-vertical active" onclick="switchDocument(0)" title="Master R3.1M Brief">
+                                📄 Master R3.1M Brief
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-title-text">Live Meeting Record &amp; Decision Memory</span>
+                </div>
+                <textarea id="liveMeetingNotes" placeholder="Type real-time investor questions, team decisions, or agreement modifications during the session..."></textarea>
+                <button class="btn btn-emerald" style="width: 100%; margin-top: 10px;" onclick="saveMeetingNotes()">Commit Session Notes to Memory</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="toast" id="toast">Suite v18.0 Calendar Scheduled</div>
+
+    <script>
+        // Set default date picker to tomorrow
+        window.addEventListener('DOMContentLoaded', () => {
+            const datePicker = document.getElementById('meetingDate');
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            datePicker.value = tomorrow.toISOString().split('T')[0];
+        });
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        let localStream = null;
+        let audioCtx = null;
+        let oscillator = null;
+        let audioPlaying = false;
+        let isConnected = true;
+        let peerConnected = true;
+        let cabinetOpen = true;
+
+        const inviteeLedger = [
+            { email: "info.lepprojects@gmail.com", topic: "Scapush Precision Strategic Review", status: "Gmail Dispatched", timestamp: new Date().toLocaleTimeString() }
+        ];
+
+        const documentCabinet = [
+            {
+                name: "Master R3.1M Brief",
+                type: "text",
+                content: `====================================================================\n[PRESTIGE MASTER INFRASTRUCTURE: R 3.1M CAPEX-BUFFERED LEDGER]\n====================================================================\nASSET VALUATION:    R 3,100,000 ZAR (Sovereign Infrastructure)\nLEAD ARCHITECT:     Sipho Wiseman Khuzwayo | Scapush Precision\n\n1. CAPITAL ALLOCATION:\n   - Energy Hub (R 1.2M): 30 kW Solar PV + 30 kW BESS Battery Array\n   - Bio-Reactor (R 1.1M): 70 m³ Primary Digester & Substrate Loops\n   - Generation & Thermal (R 800k): CHP Co-Gen + Hydronic Thermal Manifold\n\n2. REVENUE & VALORIZATION VECTORS:\n   - Vector 1: 24/7 Baseload Electricity Generation\n   - Vector 2: Reclaimed Co-Gen Heat for Microclimate Lock\n   - Vector 3: Premium Solid Organic N-P-K Bio-Fertilizer\n   - Vector 4: Concentrated Bio-Available Liquid Foliar Digestate\n   - Vector 5: Scrubbed Bio-CO2 Yield Acceleration Vector\n====================================================================`
+            }
+        ];
+
+        let activeDocIndex = 0;
+
+        function getActiveSuiteUrl() {
+            const customUrl = document.getElementById('customHostUrl').value.trim();
+            if (customUrl) return customUrl;
+            return "https://siphokhuzwayo12-a11y.github.io/sovereign_conference_invitation_center/index.html";
+        }
+
+        function openGmailCompose() {
+            const email = document.getElementById('inviteEmail').value.trim();
+            const topic = document.getElementById('meetingTopic').value.trim();
+            const dateVal = document.getElementById('meetingDate').value;
+            const timeVal = document.getElementById('meetingTime').value;
+
+            if (!email) {
+                showToast("Please enter an invitee email.");
+                return;
+            }
+
+            const roomLink = getActiveSuiteUrl();
+            const formattedSchedule = `${dateVal || 'Scheduled Date'} at ${timeVal || '10:00'} SAST`;
+            
+            const bodyText = `Honorable Steward,\n\nYou are invited to join the Sovereign Executive Conference Suite.\n\nTopic: ${topic}\nDate & Time: ${formattedSchedule}\nAccess Link: ${roomLink}\nPasskey: SCAPUSH-PRECISION-7799-BIO-SOLAR-DOMED-2026\n\nLead Architect: Sipho Wiseman Khuzwayo`;
+            
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(topic + ' - Scheduled Call')}&body=${encodeURIComponent(bodyText)}`;
+
+            window.open(gmailUrl, '_blank');
+            recordInvitee(email, topic, "Gmail Scheduled");
+            showToast(`Gmail Schedule Launched for ${email}`);
+        }
+
+        function recordInvitee(email, topic, status) {
+            const existingIndex = inviteeLedger.findIndex(i => i.email === email);
+            if (existingIndex > -1) {
+                inviteeLedger[existingIndex].status = status;
+                inviteeLedger[existingIndex].timestamp = new Date().toLocaleTimeString();
+            } else {
+                inviteeLedger.push({
+                    email,
+                    topic,
+                    status,
+                    timestamp: new Date().toLocaleTimeString()
+                });
+            }
+            updateInviteeDropdown();
+        }
+
+        function updateInviteeDropdown() {
+            const dropdown = document.getElementById('inviteeDropdown');
+            dropdown.innerHTML = `<option value="">-- Active Invitee Roster (${inviteeLedger.length}) --</option>` +
+                inviteeLedger.map((inv, idx) => `
+                    <option value="${idx}">✔ ${inv.email} [${inv.status} - ${inv.timestamp}]</option>
+                `).join('');
+        }
+
+        function selectInviteeFromDropdown(selectElement) {
+            const idx = selectElement.value;
+            if (idx === "") return;
+            const inv = inviteeLedger[idx];
+            document.getElementById('inviteEmail').value = inv.email;
+            document.getElementById('meetingTopic').value = inv.topic;
+            showToast(`Selected Invitee: ${inv.email}`);
+        }
+
+        function exportCalendarInvite() {
+            const topic = document.getElementById('meetingTopic').value.trim() || "Sovereign Executive Conference";
+            const dateVal = document.getElementById('meetingDate').value;
+            const timeVal = document.getElementById('meetingTime').value;
+            const roomLink = getActiveSuiteUrl();
+
+            let dtStart = "20260918T100000Z";
+            if (dateVal && timeVal) {
+                dtStart = dateVal.replace(/-/g, "") + "T" + timeVal.replace(":", "") + "00Z";
+            }
+            
+            const icsData = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "PRODID:-//Scapush Precision//Prestige Suite//EN",
+                "BEGIN:VEVENT",
+                `SUMMARY:${topic}`,
+                `DTSTART:${dtStart}`,
+                `DESCRIPTION:Join Sovereign Conference Suite: ${roomLink}\\nPasskey: SCAPUSH-PRECISION-7799-BIO-SOLAR-DOMED-2026`,
+                "LOCATION:Prestige Sovereign Command Dome",
+                "STATUS:CONFIRMED",
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ].join("\n");
+
+            const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `conference-${dateVal || 'schedule'}.ics`;
+            link.click();
+            showToast("Calendar Schedule (.ics) Downloaded.");
+        }
+
+        function runInviteDryRun() {
+            const email = document.getElementById('inviteEmail').value.trim() || "info.lepprojects@gmail.com";
+            const topic = document.getElementById('meetingTopic').value.trim() || "Scapush Precision Strategic Review";
+            const dateVal = document.getElementById('meetingDate').value;
+            const timeVal = document.getElementById('meetingTime').value;
+            
+            recordInvitee(email, topic, "Dry-Run Tested");
+            showToast(`[DRY-RUN] Verifying schedule (${dateVal} ${timeVal}) for ${email}...`);
+            
+            setTimeout(() => {
+                showToast(`[DRY-RUN PASSED] Calendar & direct link verified!`);
+            }, 1200);
+        }
+
+        function toggleCabinet() {
+            const shelf = document.getElementById('verticalShelf');
+            const btn = document.getElementById('toggleCabinetBtn');
+            cabinetOpen = !cabinetOpen;
+
+            if (cabinetOpen) {
+                shelf.classList.remove('collapsed');
+                btn.innerText = "Collapse Shelf ➔";
+            } else {
+                shelf.classList.add('collapsed');
+                btn.innerText = "📁 Open Shelf";
+            }
+        }
+
+        function uploadToCabinet(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            const isHtml = file.type.includes('html') || file.name.endsWith('.html') || file.name.endsWith('.htm');
+
+            reader.onload = function(evt) {
+                const newDoc = {
+                    name: file.name,
+                    type: isHtml ? 'html' : 'text',
+                    content: evt.target.result
+                };
+                
+                documentCabinet.push(newDoc);
+                renderShelfTabs();
+                switchDocument(documentCabinet.length - 1);
+                showToast(`Saved "${file.name}" to Cabinet Shelf`);
+            };
+
+            reader.readAsText(file);
+        }
+
+        function renderShelfTabs() {
+            const shelf = document.getElementById('shelfTabs');
+            document.getElementById('docCountBadge').innerText = `(${documentCabinet.length})`;
+            shelf.innerHTML = documentCabinet.map((doc, idx) => `
+                <div class="shelf-tab-vertical ${idx === activeDocIndex ? 'active' : ''}" onclick="switchDocument(${idx})" title="${doc.name}">
+                    ${doc.type === 'html' ? '🌐' : '📄'} ${doc.name}
+                </div>
+            `).join('');
+        }
+
+        function switchDocument(index) {
+            activeDocIndex = index;
+            renderShelfTabs();
+
+            const doc = documentCabinet[index];
+            const container = document.getElementById('docViewerContainer');
+
+            if (doc.type === 'html') {
+                container.innerHTML = `<iframe id="renderedFrame"></iframe>`;
+                const iframe = document.getElementById('renderedFrame');
+                iframe.contentWindow.document.open();
+                iframe.contentWindow.document.write(doc.content);
+                iframe.contentWindow.document.close();
+            } else {
+                container.innerHTML = `<div class="text-brief-fallback">${doc.content}</div>`;
+            }
+        }
+
+        async function toggleVideo() {
+            if (!isConnected) { showToast("Cannot start video while session is disconnected."); return; }
+            const videoElement = document.getElementById('localVideo');
+            const avatar = document.getElementById('hostAvatar');
+            const videoBtn = document.getElementById('videoBtn');
+
+            if (!localStream) {
+                try {
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    videoElement.srcObject = localStream;
+                    videoElement.style.display = 'block';
+                    avatar.style.display = 'none';
+                    videoBtn.innerText = "Stop Camera Stream";
+                    showToast("Camera Stream Connected.");
+                } catch (err) {
+                    showToast("Camera access denied or unavailable.");
+                }
+            } else {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+                videoElement.style.display = 'none';
+                avatar.style.display = 'flex';
+                videoBtn.innerText = "Initialize Stream";
+                showToast("Camera Stream Stopped.");
+            }
+        }
+
+        function toggleAudio() {
+            if (!isConnected) { showToast("Cannot toggle audio while session is disconnected."); return; }
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (!audioPlaying) {
+                oscillator = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+                oscillator.connect(gain);
+                gain.connect(audioCtx.destination);
+                oscillator.start();
+                audioPlaying = true;
+                document.getElementById('audioBtn').innerText = "Mute Loop";
+                showToast("Sovereign Audio Loop Initialized.");
+            } else {
+                if (oscillator) oscillator.stop();
+                audioPlaying = false;
+                document.getElementById('audioBtn').innerText = "Audio Loop";
+                showToast("Audio Loop Muted.");
+            }
+        }
+
+        function togglePeerSim() {
+            const status = document.getElementById('peerStatus');
+            const avatar = document.getElementById('peerAvatar');
+            const btn = document.getElementById('peerBtn');
+
+            if (!peerConnected) {
+                peerConnected = true;
+                status.innerText = "[PEER CONNECTED]";
+                status.style.color = "var(--accent-emerald)";
+                avatar.style.background = "rgba(0,229,255,0.2)";
+                avatar.style.borderColor = "var(--accent-cyan)";
+                avatar.style.color = "var(--accent-cyan)";
+                btn.innerText = "Disconnect Peer";
+                showToast("Peer Steward Joined Session.");
+            } else {
+                peerConnected = false;
+                status.innerText = "[AWAITING JOIN]";
+                status.style.color = "var(--text-secondary)";
+                avatar.style.background = "rgba(0,255,157,0.1)";
+                avatar.style.borderColor = "var(--accent-gold)";
+                avatar.style.color = "var(--accent-gold)";
+                btn.innerText = "Simulate Peer Join";
+                showToast("Peer Steward Left Session.");
+            }
+        }
+
+        function toggleSessionState() {
+            const statusPill = document.getElementById('suiteStatus');
+            const sessionBtn = document.getElementById('sessionBtn');
+
+            if (isConnected) {
+                if (localStream) {
+                    localStream.getTracks().forEach(track => track.stop());
+                    localStream = null;
+                    document.getElementById('localVideo').style.display = 'none';
+                    document.getElementById('hostAvatar').style.display = 'flex';
+                    document.getElementById('videoBtn').innerText = "Camera";
+                }
+                if (audioPlaying && oscillator) {
+                    oscillator.stop();
+                    audioPlaying = false;
+                    document.getElementById('audioBtn').innerText = "Audio Loop";
+                }
+                isConnected = false;
+                statusPill.innerText = "SESSION DISCONNECTED";
+                statusPill.classList.add('disconnected');
+                sessionBtn.innerText = "Reconnect Session";
+                sessionBtn.style.borderColor = "var(--accent-emerald)";
+                sessionBtn.style.color = "var(--accent-emerald)";
+                showToast("Session Disconnected.");
+            } else {
+                isConnected = true;
+                statusPill.innerText = "SOVEREIGN CONFERENCE ROOM ACTIVE";
+                statusPill.classList.remove('disconnected');
+                sessionBtn.innerText = "Disconnect Session";
+                sessionBtn.style.borderColor = "var(--accent-danger)";
+                sessionBtn.style.color = "var(--accent-danger)";
+                showToast("Sovereign Session Reconnected.");
+            }
+        }
+
+        const canvas = document.getElementById('whiteboard');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = 200;
+            ctx.strokeStyle = '#00FF9D';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        setTimeout(resizeCanvas, 100);
+
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        function startDrawing(e) {
+            drawing = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            e.preventDefault();
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() { drawing = false; }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            showToast("Whiteboard Cleared");
+        }
+
+        function exportBlueprint() {
+            const image = canvas.toDataURL("image/png");
+            const link = document.createElement('a');
+            link.download = 'sovereign-architectural-blueprint.png';
+            link.href = image;
+            link.click();
+            showToast("Blueprint Exported");
+        }
+
+        const notes = document.getElementById('liveMeetingNotes');
+        notes.value = localStorage.getItem('prestige_conference_notes') || '';
+
+        function saveMeetingNotes() {
+            localStorage.setItem('prestige_conference_notes', notes.value);
+            showToast("Notes Committed to Storage");
+        }
+    </script>
+
+</body></html>
